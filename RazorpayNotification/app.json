@@ -1,0 +1,30 @@
+{
+    "id": "65d4352c-44c5-45fd-b748-11620c4337ad",
+    "version": "0.0.1",
+    "requiredApiVersion": "^1.19.0",
+    "iconFile": "icon.png",
+    "author": {
+        "name": "abhinavkrin",
+        "homepage": "https://avitechlab.com",
+        "support": "https://avitechlab.com"
+    },
+    "name": "Razorpay Notification",
+    "nameSlug": "razorpay-notification",
+    "classFile": "RazorpayNotificationApp.ts",
+    "description": "Get notified about razorpay payments",
+    "implements": [],
+    "permissions": [
+        {
+            "name": "server-setting.read"
+        },
+        {
+            "name": "api"
+        },
+        {
+            "name": "slashcommand"
+        },
+        {
+            "name": "message.write"
+        }
+    ]
+}
