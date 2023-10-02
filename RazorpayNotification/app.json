@@ -1,12 +1,12 @@
 {
     "id": "65d4352c-44c5-45fd-b748-11620c4337ad",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "requiredApiVersion": "^1.19.0",
     "iconFile": "icon.png",
     "author": {
         "name": "abhinavkrin",
-        "homepage": "https://avitechlab.com",
-        "support": "https://avitechlab.com"
+        "homepage": "https://github.com/abhinavkrin",
+        "support": "https://github.com/abhinavkrin"
     },
     "name": "Razorpay Notification",
     "nameSlug": "razorpay-notification",
