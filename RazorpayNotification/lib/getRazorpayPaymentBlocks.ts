@@ -6,7 +6,7 @@ export const getRazorpayPaymentBlocks = (payment: any) => {
     const blocks = [
         {
             type: "section",
-            text: { type: "mrkdwn", text: "### [Razorpay] Payment Successful ✅" },
+            text: { type: "mrkdwn", text: "#### [Razorpay] Payment Successful ✅" },
         },
         { type: "section", text: { type: "mrkdwn", text: `## ${curreny} ${amount}\n` } },
         {
