@@ -39,34 +39,11 @@ export class PaymentWebhook extends ApiEndpoint {
         }
         switch (request.content.event) {
             case PaymentEvent.Authorized:
-                const payload = request.content.payload;
-                const payment = payload.payment.entity;
-
-                const roomPersistence = new RoomSubscriptionPersistence(
-                    persis,
-                    read.getPersistenceReader()
-                );
-                const subscribedRooms = await roomPersistence.getAllRooms();
-                this.app.getLogger().log(subscribedRooms);
-                const sendNotification = async (subscribedRoom) => {
-                    try {
-                        const room = await read.getRoomReader().getById(subscribedRoom.room.id);
-                        if (room) {
-                            const messageBuilder = modify
-                                .getCreator()
-                                .startMessage()
-                                .setRoom(room)
-                                .addBlocks(getRazorpayPaymentBlocks(payment));
-                            await modify.getCreator().finish(messageBuilder);
-                        } else {
-                            this.app.getLogger().log(`Room ${subscribedRoom.room.id} not found`);
-                        }
-                    } catch (e) {
-                        // unknown failure
-                        this.app.getLogger().log(e);
-                    }
-                };
-                await Promise.all(subscribedRooms.map(sendNotification));
+                await modify.getScheduler().scheduleOnce({
+                    id: 'notify-payment',
+                    when: new Date(),
+                    data: request.content.payload,
+                })
                 return { status: 200, content: { message: "ok" } };
             default:
                 return {

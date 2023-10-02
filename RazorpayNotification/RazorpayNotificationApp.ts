@@ -21,6 +21,9 @@ import { SubscribeCommand } from "./commands/SubscribeCommand";
 import { PaymentWebhook } from "./endpoints/PaymentWebhook";
 import { InstallationTokenPersistence } from "./lib/InstallationTokenPersistence";
 import { getWebhookUrl } from "./lib/getWebhookUrl";
+import { RoomSubscriptionPersistence } from "./lib/RoomSubscriptionPersistence";
+import { getRazorpayPaymentBlocks } from "./lib/getRazorpayPaymentBlocks";
+import { NotifyPaymentProcessor } from "./lib/NotifyPaymentProcessor";
 
 export class RazorpayNotificationApp extends App {
     constructor(info: IAppInfo, logger: ILogger, accessors: IAppAccessors) {
@@ -56,6 +59,7 @@ export class RazorpayNotificationApp extends App {
         await configuration.slashCommands.provideSlashCommand(
             new SubscribeCommand(this)
         );
+        await configuration.scheduler.registerProcessors([new NotifyPaymentProcessor()])
     }
     async onInstall(
         context: IAppInstallationContext,
