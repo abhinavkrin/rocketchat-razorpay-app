@@ -1,8 +1,13 @@
 import {
     IAppAccessors,
+    IAppInstallationContext,
     IConfigurationExtend,
     IEnvironmentRead,
+    IHttp,
     ILogger,
+    IModify,
+    IPersistence,
+    IRead,
 } from "@rocket.chat/apps-engine/definition/accessors";
 import { App } from "@rocket.chat/apps-engine/definition/App";
 import { IAppInfo } from "@rocket.chat/apps-engine/definition/metadata";
@@ -12,9 +17,10 @@ import {
     ApiVisibility,
 } from "@rocket.chat/apps-engine/definition/api";
 import { SettingType } from "@rocket.chat/apps-engine/definition/settings";
-import { URL } from "url";
 import { SubscribeCommand } from "./commands/SubscribeCommand";
 import { PaymentWebhook } from "./endpoints/PaymentWebhook";
+import { InstallationTokenPersistence } from "./lib/InstallationTokenPersistence";
+import { getWebhookUrl } from "./lib/getWebhookUrl";
 
 export class RazorpayNotificationApp extends App {
     constructor(info: IAppInfo, logger: ILogger, accessors: IAppAccessors) {
@@ -35,25 +41,33 @@ export class RazorpayNotificationApp extends App {
             security: ApiSecurity.UNSECURE,
             endpoints: [new PaymentWebhook(this)],
         });
-        const serverURL = await environmentRead
-            .getServerSettings()
-            .getValueById("Site_Url");
-        const webhookEndPoint = this.getAccessors().providedApiEndpoints.find(
-            (endpoint) => endpoint.path === "payment-webhook"
-        );
-        const webhookURL = webhookEndPoint
-            ? new URL(webhookEndPoint.computedPath || "", serverURL).toString()
-            : "";
+        const webhookUrl = await getWebhookUrl(this);
         await configuration.settings.provideSetting({
             id: "webhook-url",
             i18nLabel: "Webhook URL (DO NOT CHANGE)",
-            i18nDescription: "Add this webhook url to Razorpay webhooks with `payments.authorised` event selected.",
+            i18nDescription:
+                "Add this webhook url to Razorpay webhooks with `payments.authorised` event selected.",
             required: false,
             type: SettingType.STRING,
             packageValue: "",
-            value: webhookURL,
             public: false,
+            value: webhookUrl,
         });
-        await configuration.slashCommands.provideSlashCommand(new SubscribeCommand(this));
+        await configuration.slashCommands.provideSlashCommand(
+            new SubscribeCommand(this)
+        );
+    }
+    async onInstall(
+        context: IAppInstallationContext,
+        read: IRead,
+        http: IHttp,
+        persistence: IPersistence,
+        modify: IModify
+    ): Promise<void> {
+        const installationTokenPersistence = new InstallationTokenPersistence(
+            persistence,
+            read.getPersistenceReader()
+        );
+        await installationTokenPersistence.createToken();
     }
 }

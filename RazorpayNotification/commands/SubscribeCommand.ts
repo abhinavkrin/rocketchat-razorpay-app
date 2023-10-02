@@ -15,8 +15,8 @@ import { HELP_TEXT } from "../lib/constants";
 const SubCommands = {
     subscribe: "subscribe",
     unsubscribe: "unsubscribe",
-    help: "help"
-}
+    help: "help",
+};
 export class SubscribeCommand implements ISlashCommand {
     public constructor(private readonly app: RazorpayNotificationApp) {
         this.app = app;
@@ -33,12 +33,18 @@ export class SubscribeCommand implements ISlashCommand {
         persistence: IPersistence
     ): Promise<void> {
         const [subCommand = "help"] = context.getArguments();
-        switch(subCommand) {
+        switch (subCommand) {
             case SubCommands.subscribe:
                 this.handleSubscribe(context, read, modify, http, persistence);
                 break;
             case SubCommands.unsubscribe:
-                this.handleUnsubscribe(context, read, modify, http, persistence);
+                this.handleUnsubscribe(
+                    context,
+                    read,
+                    modify,
+                    http,
+                    persistence
+                );
             case SubCommands.help:
             default:
                 this.handleHelp(context, read, modify, http, persistence);
@@ -54,14 +60,14 @@ export class SubscribeCommand implements ISlashCommand {
     ) {
         const sender = context.getSender();
         const room = context.getRoom();
-        const allowedUsers:string[] =
+        const allowedUsers: string[] =
             (
                 await read
                     .getEnvironmentReader()
                     .getSettings()
                     .getById("allowed-users")
             )?.value?.split(",") || [];
-        const allowedRoles:string[] =
+        const allowedRoles: string[] =
             (
                 await read
                     .getEnvironmentReader()
@@ -69,24 +75,33 @@ export class SubscribeCommand implements ISlashCommand {
                     .getById("allowed-roles")
             )?.value?.split(",") || [];
         const isUserAllowedToSubscribe = allowedUsers.includes(sender.username);
-        const isRoleAllowedToSubscribe = !!allowedRoles.find((role) =>  sender.roles.includes(role));
-        const roomPersistence = new RoomSubscriptionPersistence(persistence, read.getPersistenceReader());
-        const messageBuilder = modify.getCreator().startMessage()
-                .setRoom(room);
+        const isRoleAllowedToSubscribe = !!allowedRoles.find((role) =>
+            sender.roles.includes(role)
+        );
+        const roomPersistence = new RoomSubscriptionPersistence(
+            persistence,
+            read.getPersistenceReader()
+        );
+        const messageBuilder = modify.getCreator().startMessage().setRoom(room);
         if (isRoleAllowedToSubscribe || isUserAllowedToSubscribe) {
             // this.app.getLogger().log('Allowed to subscribe');
             const isSubscribed = await roomPersistence.isSubscribed(room);
             if (isSubscribed) {
-                messageBuilder.setText(`*Already Subscribed* to razorpay payment notifcations`);
+                messageBuilder.setText(
+                    `*Already Subscribed* to razorpay payment notifcations`
+                );
             } else {
                 roomPersistence.addRoom(room, sender);
-                messageBuilder.setText(`*Subscribed* to razorpay payment notifcations`);
+                messageBuilder.setText(
+                    `*Subscribed* to razorpay payment notifcations`
+                );
             }
         } else {
             // not allowed to subscribe
             // this.app.getLogger().log('Not allowed to subscribe');
-            messageBuilder.setText(`You do not have enough permission to subscribe to razorpay notifications. Check app settings to allow.`);
-            await modify.getCreator().finish(messageBuilder);
+            messageBuilder.setText(
+                `You do not have enough permission to subscribe to razorpay notifications. Check app settings to allow.`
+            );
         }
         await modify.getCreator().finish(messageBuilder);
     }
@@ -100,14 +115,14 @@ export class SubscribeCommand implements ISlashCommand {
     ) {
         const sender = context.getSender();
         const room = context.getRoom();
-        const allowedUsers:string[] =
+        const allowedUsers: string[] =
             (
                 await read
                     .getEnvironmentReader()
                     .getSettings()
                     .getById("allowed-users")
             )?.value?.split(",") || [];
-        const allowedRoles:string[] =
+        const allowedRoles: string[] =
             (
                 await read
                     .getEnvironmentReader()
@@ -115,10 +130,14 @@ export class SubscribeCommand implements ISlashCommand {
                     .getById("allowed-roles")
             )?.value?.split(",") || [];
         const isUserAllowedToSubscribe = allowedUsers.includes(sender.username);
-        const isRoleAllowedToSubscribe = !!allowedRoles.find((role) =>  sender.roles.includes(role));
-        const roomPersistence = new RoomSubscriptionPersistence(persistence, read.getPersistenceReader());
-        const messageBuilder = modify.getCreator().startMessage()
-                .setRoom(room);
+        const isRoleAllowedToSubscribe = !!allowedRoles.find((role) =>
+            sender.roles.includes(role)
+        );
+        const roomPersistence = new RoomSubscriptionPersistence(
+            persistence,
+            read.getPersistenceReader()
+        );
+        const messageBuilder = modify.getCreator().startMessage().setRoom(room);
         if (isRoleAllowedToSubscribe || isUserAllowedToSubscribe) {
             // this.app.getLogger().log('Allowed to subscribe');
             const isSubscribed = await roomPersistence.isSubscribed(room);
@@ -128,15 +147,20 @@ export class SubscribeCommand implements ISlashCommand {
                 } catch (e) {
                     this.app.getLogger().log(e);
                 }
-                messageBuilder.setText(`*Unsubscribed* to razorpay payment notifcations`);
+                messageBuilder.setText(
+                    `*Unsubscribed* to razorpay payment notifcations`
+                );
             } else {
-                messageBuilder.setText(`Nothing to do since room is not subscribed to razorpay notifications.`);
+                messageBuilder.setText(
+                    `Nothing to do since room is not subscribed to razorpay notifications.`
+                );
             }
         } else {
             // not allowed to subscribe
             // this.app.getLogger().log('Not allowed to subscribe');
-            messageBuilder.setText(`You do not have enough permission to unsubscribe to razorpay notifications. Check app settings to allow.`);
-            await modify.getCreator().finish(messageBuilder);
+            messageBuilder.setText(
+                `You do not have enough permission to unsubscribe to razorpay notifications. Check app settings to allow.`
+            );
         }
         await modify.getCreator().finish(messageBuilder);
     }
@@ -150,9 +174,11 @@ export class SubscribeCommand implements ISlashCommand {
     ) {
         const sender = context.getSender();
         const room = context.getRoom();
-        const messageBuilder = modify.getCreator().startMessage()
-                .setRoom(room)
-                .setText(HELP_TEXT);
+        const messageBuilder = modify
+            .getCreator()
+            .startMessage()
+            .setRoom(room)
+            .setText(HELP_TEXT);
         await modify.getCreator().finish(messageBuilder);
     }
 }
