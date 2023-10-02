@@ -13,7 +13,6 @@ import {
 import { getRazorpayPaymentBlocks } from "../lib/getRazorpayPaymentBlocks";
 import { RoomSubscriptionPersistence } from "../lib/RoomSubscriptionPersistence";
 import { InstallationTokenPersistence } from "../lib/InstallationTokenPersistence";
-import { IApp } from "@rocket.chat/apps-engine/definition/IApp";
 
 const PaymentEvent = {
     Authorized: "payment.authorized",

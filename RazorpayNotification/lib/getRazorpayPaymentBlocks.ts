@@ -8,12 +8,12 @@ export const getRazorpayPaymentBlocks = (payment: any) => {
             type: "section",
             text: { type: "mrkdwn", text: "### [Razorpay] Payment Successful ✅" },
         },
-        { type: "section", text: { type: "mrkdwn", text: `## ${curreny} ${amount}` } },
+        { type: "section", text: { type: "mrkdwn", text: `## ${curreny} ${amount}\n` } },
         {
             type: "section",
             text: {
                 type: "mrkdwn",
-                text: `*Payment Id:*\n${payment.id}\n*Customer Details*:\n${payment.email}\n${payment.contact}`,
+                text: `*Payment Id:* ${payment.id}\n*Customer Details*:\n${payment.email}\n${payment.contact}`,
             },
         },
         {
