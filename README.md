@@ -1,22 +1,28 @@
 # Razorpay Payments Notification
 Get notified about razorpay payments
 
-## Getting Started
-Now that you have generated a blank default Rocket.Chat App, what are you supposed to do next?
-Start developing! Open up your favorite editor, our recommended one is Visual Studio code,
-and start working on your App. Once you have something ready to test, you can either
-package it up and manually deploy it to your test instance or you can use the CLI to do so.
-Here are some commands to get started:
-- `rc-apps package`: this command will generate a packaged app file (zip) which can be installed **if** it compiles with TypeScript
-- `rc-apps deploy`: this will do what `package` does but will then ask you for your server url, username, and password to deploy it for you
+# Guides
+## Admin Setup
+### Deploy to RocketChat
+```
+rc-apps deploy --url <rocketchat-server-url> --username <username> --password <password>
+```
+### Setting up webhook
+You can find webhook url in the settings page of the app.
+Set the webhook url on the razorpay dashboard with `payment.authorized` event.
+*The webhook url is unique and is different for each installation*. Therefore, change the webhook in razorpay if you reinstall the app.
+## Allow only specific user or roles
+Go to App setting and set the users or roles which could subscribe a room to razorpay notification.
 
-## Documentation
-Here are some links to examples and documentation:
-- [Rocket.Chat Apps TypeScript Definitions Documentation](https://rocketchat.github.io/Rocket.Chat.Apps-engine/)
-- [Rocket.Chat Apps TypeScript Definitions Repository](https://github.com/RocketChat/Rocket.Chat.Apps-engine)
-- [Example Rocket.Chat Apps](https://github.com/graywolf336/RocketChatApps)
-- Community Forums
-  - [App Requests](https://forums.rocket.chat/c/rocket-chat-apps/requests)
-  - [App Guides](https://forums.rocket.chat/c/rocket-chat-apps/guides)
-  - [Top View of Both Categories](https://forums.rocket.chat/c/rocket-chat-apps)
-- [#rocketchat-apps on Open.Rocket.Chat](https://open.rocket.chat/channel/rocketchat-apps)
+## Subscribe to razorpay payment notifications
+In a room execute slash command
+```
+/razorpay subscribe
+```
+The room will then receive notification messages for successful payments
+
+## Usubscribe to razorpay payment notifications
+In a room execute slash command
+```
+/razorpay unsubscribe
+```

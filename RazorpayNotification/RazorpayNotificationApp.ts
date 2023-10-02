@@ -46,7 +46,7 @@ export class RazorpayNotificationApp extends App {
             id: "webhook-url",
             i18nLabel: "Webhook URL (DO NOT CHANGE)",
             i18nDescription:
-                "Add this webhook url to Razorpay webhooks with `payments.authorised` event selected.",
+                "Add this webhook url to Razorpay webhooks with `payments.authorized` event selected.",
             required: false,
             type: SettingType.STRING,
             packageValue: "",
