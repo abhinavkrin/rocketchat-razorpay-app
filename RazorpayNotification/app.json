@@ -28,6 +28,9 @@
         },
         {
             "name": "persistence"
+        },
+        {
+            "name": "room.read"
         }
     ]
 }

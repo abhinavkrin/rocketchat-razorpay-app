@@ -45,6 +45,7 @@ export class SubscribeCommand implements ISlashCommand {
                     http,
                     persistence
                 );
+                break;
             case SubCommands.help:
             default:
                 this.handleHelp(context, read, modify, http, persistence);

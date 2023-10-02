@@ -13,6 +13,7 @@ import {
 import { getRazorpayPaymentBlocks } from "../lib/getRazorpayPaymentBlocks";
 import { RoomSubscriptionPersistence } from "../lib/RoomSubscriptionPersistence";
 import { InstallationTokenPersistence } from "../lib/InstallationTokenPersistence";
+import { IApp } from "@rocket.chat/apps-engine/definition/IApp";
 
 const PaymentEvent = {
     Authorized: "payment.authorized",
@@ -47,16 +48,23 @@ export class PaymentWebhook extends ApiEndpoint {
                     read.getPersistenceReader()
                 );
                 const subscribedRooms = await roomPersistence.getAllRooms();
+                this.app.getLogger().log(subscribedRooms);
                 const sendNotification = async (subscribedRoom) => {
                     try {
-                        const messageBuilder = modify
-                            .getCreator()
-                            .startMessage()
-                            .setRoom(subscribedRoom.room.id)
-                            .addBlocks(getRazorpayPaymentBlocks(payment));
-                        await modify.getCreator().finish(messageBuilder);
+                        const room = await read.getRoomReader().getById(subscribedRoom.room.id);
+                        if (room) {
+                            const messageBuilder = modify
+                                .getCreator()
+                                .startMessage()
+                                .setRoom(room)
+                                .addBlocks(getRazorpayPaymentBlocks(payment));
+                            await modify.getCreator().finish(messageBuilder);
+                        } else {
+                            this.app.getLogger().log(`Room ${subscribedRoom.room.id} not found`);
+                        }
                     } catch (e) {
                         // unknown failure
+                        this.app.getLogger().log(e);
                     }
                 };
                 await Promise.all(subscribedRooms.map(sendNotification));
