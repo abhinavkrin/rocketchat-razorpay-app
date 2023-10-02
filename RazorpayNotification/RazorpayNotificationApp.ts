@@ -7,7 +7,6 @@ import {
 import { App } from "@rocket.chat/apps-engine/definition/App";
 import { IAppInfo } from "@rocket.chat/apps-engine/definition/metadata";
 import { settings } from "./settings/settings";
-import { PaymentWebhook } from "./endpoints/PaymentWebhook";
 import {
     ApiSecurity,
     ApiVisibility,
@@ -15,6 +14,7 @@ import {
 import { SettingType } from "@rocket.chat/apps-engine/definition/settings";
 import { URL } from "url";
 import { SubscribeCommand } from "./commands/SubscribeCommand";
+import { PaymentWebhook } from "./endpoints/PaymentWebhook";
 
 export class RazorpayNotificationApp extends App {
     constructor(info: IAppInfo, logger: ILogger, accessors: IAppAccessors) {

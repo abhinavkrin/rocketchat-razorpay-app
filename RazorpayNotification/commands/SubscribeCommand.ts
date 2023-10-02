@@ -9,7 +9,6 @@ import {
     IRead,
 } from "@rocket.chat/apps-engine/definition/accessors";
 import { RazorpayNotificationApp } from "../RazorpayNotificationApp";
-import { RocketChatAssociationModel, RocketChatAssociationRecord } from "@rocket.chat/apps-engine/definition/metadata";
 import { RoomSubscriptionPersistence } from "../lib/RoomSubscriptionPersistence";
 import { HELP_TEXT } from "../lib/constants";
 
