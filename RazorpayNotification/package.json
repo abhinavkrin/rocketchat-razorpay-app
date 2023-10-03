@@ -1,6 +1,6 @@
 {
     "name": "rocketchat-razorpay-app",
-    "author": "abhinavkrin",
+    "author": "Abhinav Kumar",
     "license": "ISC",
     "devDependencies": {
         "@rocket.chat/apps-engine": "^1.19.0",
