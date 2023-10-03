@@ -1,7 +1,7 @@
 {
     "id": "65d4352c-44c5-45fd-b748-11620c4337ad",
     "version": "1.0.0",
-    "requiredApiVersion": "^1.19.0",
+    "requiredApiVersion": "^1.36.0",
     "iconFile": "icon.png",
     "author": {
         "name": "Abhinav Kumar",
